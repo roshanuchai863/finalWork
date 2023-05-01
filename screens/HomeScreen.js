@@ -12,7 +12,6 @@ import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "firebase/
 import { initializeApp } from "firebase/app";
 import * as ImagePicker from 'expo-image-picker';
 import { firebaseConfig } from "../config/Config"
-
 export function HomeScreen(props) {
   const navigation = useNavigation()
   const authStatus = useContext(AuthContext)
