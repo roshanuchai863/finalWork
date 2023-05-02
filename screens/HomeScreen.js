@@ -31,7 +31,7 @@ export function HomeScreen(props) {
   const [itemName, setItemName] = useState("")
   const [itemDesc, setItemDesc] = useState("")
   const [itemPrice, setItemPrice] = useState("")
-  const [image, setImage] = useState("");
+  const [newimage, setImage] = useState("");
 
 
   const [noteData, setNoteData] = useState([])
@@ -42,7 +42,7 @@ export function HomeScreen(props) {
   const saveNote = async () => {
     setShowModal(false)
     const noteObj = {
-      ImageUrl: imageUrl,
+      ImageUrl: newimage,
       productTitle: itemName,
       productDesc: itemDesc,
       productPrice: itemPrice,
@@ -71,12 +71,12 @@ export function HomeScreen(props) {
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
-      console.log("image location:" + image)
+      console.log("image location:" + newimage)
     }
   };
 
 
-  
+
 
 
   // image upload
@@ -92,7 +92,7 @@ export function HomeScreen(props) {
           reject(new TypeError("Network request Failed"));
         }
         xhr.responseType = "blob";
-        xhr.open("Get", image, true)
+        xhr.open("Get", newimage, true)
         xhr.send();
       })
 
@@ -145,18 +145,17 @@ export function HomeScreen(props) {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             console.log('File available at', downloadURL);
             setImage(downloadURL);
-            console.log("image source:" + image + "userid:" + authStatus.uid);
           });
         }
       );
 
     }
 
-    if (image != null) {
+    if (newimage != null) {
       uploadImage();
       //setImage(imageUrl)
     }
-  }, [image]);
+  }, [newimage]);
 
   useEffect(() => {
     if (!authStatus) {
@@ -215,7 +214,7 @@ export function HomeScreen(props) {
         <View style={styles.modal}>
           <TouchableOpacity >
             <Text style={styles.image} onPress={pickImage}>Select Image</Text>
-            {image && <Image source={{ uri: image }} style={{
+            {newimage && <Image source={{ uri: newimage }} style={{
               width: 300, height: 400, padding: 20, alignSelf: 'center',
             }} />}
           </TouchableOpacity>

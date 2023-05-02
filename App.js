@@ -64,9 +64,7 @@ export default function App() {
   useEffect(() => {
     if (CoffeeData.length === 0 && auth) {
       GetData()
-      // readData();
-      console.log("Dataare here")
-      console.log(CoffeeData);
+
 
     }
 
@@ -102,7 +100,6 @@ export default function App() {
           coffeeItems.push(item)
       })
       setCoffeeData(coffeeItems)
-      console.log("final doc" + notes.data)
     })
   }
 
