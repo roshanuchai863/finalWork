@@ -6,8 +6,8 @@ export function ListItem(props) {
     const data = {
         id: props.id,
         itemName: props.itemName,
-        itemPrice: props.itemPrice,
         itemDesc: props.itemDesc,
+        itemPrice: props.itemPrice,
         image: props.image,
 
 

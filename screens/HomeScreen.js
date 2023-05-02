@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Modal, TextInput, StyleSheet, FlatList, Image } from "react-native"
+import { View, Text, TouchableOpacity, Modal, SafeAreaView, TextInput, ScrollView, StyleSheet, FlatList, Image } from "react-native"
 import { useState, useEffect, useContext } from 'react'
 import { AuthContext } from "../contexts/AuthContext"
 import { CoffeeContext } from "../contexts/CoffeeContext"
@@ -181,7 +181,7 @@ export function HomeScreen(props) {
         visible={showModal}
         onRequestClose={() => setShowModal(false)}
       >
-{/* THIS MODEL WILL ADD THE DATA TO THE DATABASE */}
+        {/* THIS MODEL WILL ADD THE DATA TO THE DATABASE */}
         <View style={styles.modal}>
           <TouchableOpacity >
             <Text style={styles.image} onPress={pickImage}>Select Image</Text>
@@ -236,21 +236,27 @@ export function HomeScreen(props) {
       <TouchableOpacity style={styles.button} onPress={() => setShowModal(true)} >
         <IonIcons name="add-outline" size={28} color="white" />
       </TouchableOpacity>
-      <FlatList
-        data={CaffeeItem}
-        renderItem={({ item }) => (
-          <ListItem
-            id={item.id}
-            itemName={item.itemName}
-            itemPrice={item.itemPrice}
-            itemDesc={item.itemDesc}
-            image={item.image}
-            handler={ListClickHandler}
+
+      {/* scrolling home screen */}
+      <SafeAreaView>
+        <ScrollView nestedScrollEnabled={true}>
+          <FlatList
+            data={CaffeeItem}
+            renderItem={({ item }) => (
+              <ListItem
+                id={item.id}
+                itemName={item.itemName}
+                itemPrice={item.itemPrice}
+                itemDesc={item.itemDesc}
+                image={item.image}
+                handler={ListClickHandler}
+              />
+            )}
+            keyExtractor={item => item.id}
+            ItemSeparatorComponent={ListItemSeparator}
           />
-        )}
-        keyExtractor={item => item.id}
-        ItemSeparatorComponent={ListItemSeparator}
-      />
+        </ScrollView>
+      </SafeAreaView>
     </View>
   )
 }
@@ -260,11 +266,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "relative"
   },
-  headingText:{
-    fontSize:30,
-textAlign:"center",
-fontWeight:"bold",
-padding:7,
+  headingText: {
+    fontSize: 30,
+    textAlign: "center",
+    fontWeight: "bold",
+    padding: 7,
   },
   modal: {
     padding: 10,
