@@ -19,6 +19,7 @@ export function TabScreen() {
     tabBarIcon: ({ color }) => <IonIcons name="person-outline" color={color} size={28} />
   }
   return (
+    
     <Tab.Navigator initialRouteName="Notes" activeColor="#e91e63">
       <Tab.Screen
         name="Notes"

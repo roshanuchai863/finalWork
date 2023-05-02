@@ -171,74 +171,76 @@ export function HomeScreen(props) {
 
 
   return (
-    <View style={styles.screen}>
-      {/* modal element */}
+    <SafeAreaView>
+      <View style={styles.screen}>
+        {/* modal element */}
 
-      <Text style={styles.headingText}>KANGAROO CAFE</Text>
-      <Modal
-        transparent={false}
-        animationType="slide"
-        visible={showModal}
-        onRequestClose={() => setShowModal(false)}
-      >
-        {/* THIS MODEL WILL ADD THE DATA TO THE DATABASE */}
-        <View style={styles.modal}>
-          <TouchableOpacity >
-            <Text style={styles.image} onPress={pickImage}>Select Image</Text>
-            {newimage && <Image source={{ uri: newimage }} style={{
-              width: 300, height: 400, padding: 20, alignSelf: 'center',
-            }} />}
-          </TouchableOpacity>
+        <Text style={styles.headingText}>KANGAROO CAFE</Text>
 
-          <Text style={styles.modalLabel}>Item Name</Text>
-          <TextInput
-            style={styles.modalInput}
-            value={itemName}
-            onChangeText={(val) => setItemName(val)}
-          />
-
-
-          <Text style={styles.modalLabel} >Description</Text>
-          <TextInput
-            multiline={true}
-            style={styles.modalInput2}
-            value={itemDesc}
-            onChangeText={(val) => setItemDesc(val)}
-          />
-
-
-          <Text style={styles.modalLabel}>Price</Text>
-          <TextInput
-            style={styles.modalInput}
-            value={itemPrice}
-            onChangeText={(val) => setItemPrice(val)}
-          />
-
-          <View style={styles.buttonsRow}>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setShowModal(false)}
-            >
-              <Text style={styles.buttonText} >Close</Text>
+        <Modal
+          transparent={false}
+          animationType="slide"
+          visible={showModal}
+          onRequestClose={() => setShowModal(false)}
+        >
+          {/* THIS MODEL WILL ADD THE DATA TO THE DATABASE */}
+          <View style={styles.modal}>
+            <TouchableOpacity >
+              <Text style={styles.image} onPress={pickImage}>Select Image</Text>
+              {newimage && <Image source={{ uri: newimage }} style={{
+                width: 300, height: 400, padding: 20, alignSelf: 'center',
+              }} />}
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.addButton}
-              onPress={() => saveNote()}
-            >
-              <Text style={styles.buttonText}>Save</Text>
-            </TouchableOpacity>
+
+            <Text style={styles.modalLabel}>Item Name</Text>
+            <TextInput
+              style={styles.modalInput}
+              value={itemName}
+              onChangeText={(val) => setItemName(val)}
+            />
+
+
+            <Text style={styles.modalLabel} >Description</Text>
+            <TextInput
+              multiline={true}
+              style={styles.modalInput2}
+              value={itemDesc}
+              onChangeText={(val) => setItemDesc(val)}
+            />
+
+
+            <Text style={styles.modalLabel}>Price</Text>
+            <TextInput
+              style={styles.modalInput}
+              value={itemPrice}
+              onChangeText={(val) => setItemPrice(val)}
+            />
+
+            <View style={styles.buttonsRow}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setShowModal(false)}
+              >
+                <Text style={styles.buttonText} >Close</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => saveNote()}
+              >
+                <Text style={styles.buttonText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+
           </View>
+        </Modal>
 
-        </View>
-      </Modal>
+        {/* button to open modal */}
+        <TouchableOpacity style={styles.button} onPress={() => setShowModal(true)} >
+          <IonIcons name="add-outline" size={28} color="white" />
+        </TouchableOpacity>
 
-      {/* button to open modal */}
-      <TouchableOpacity style={styles.button} onPress={() => setShowModal(true)} >
-        <IonIcons name="add-outline" size={28} color="white" />
-      </TouchableOpacity>
+        {/* scrolling home screen */}
 
-      {/* scrolling home screen */}
-      <SafeAreaView>
         <ScrollView nestedScrollEnabled={true}>
           <FlatList
             data={CaffeeItem}
@@ -256,8 +258,9 @@ export function HomeScreen(props) {
             ItemSeparatorComponent={ListItemSeparator}
           />
         </ScrollView>
-      </SafeAreaView>
-    </View>
+
+      </View >
+    </SafeAreaView>
   )
 }
 
@@ -271,6 +274,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     padding: 7,
+    marginTop: 10,
   },
   modal: {
     padding: 10,

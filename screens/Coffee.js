@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, Pressable, Image } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, Modal, StyleSheet, Pressable, Image } from 'react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { useContext, useState, useEffect } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
@@ -211,16 +211,20 @@ export function CoffeeScreen(props) {
 
       </View>
       {/* Modal */}
+
       <Modal visible={showModal} style={styles.modal}>
-        <View style={styles.row}>
-          <Pressable style={styles.deleteNote} onPress={() => deleteNote()}>
-            <Text>Delete coffee?</Text>
-          </Pressable>
-          <Pressable style={styles.cancelDelete} onPress={() => setShowModal(false)}>
-            <Text>Cancel</Text>
-          </Pressable>
-        </View>
+        <SafeAreaView>
+          <View style={styles.row}>
+            <Pressable style={styles.deleteNote} onPress={() => deleteNote()}>
+              <Text>Delete coffee?</Text>
+            </Pressable>
+            <Pressable style={styles.cancelDelete} onPress={() => setShowModal(false)}>
+              <Text>Cancel</Text>
+            </Pressable>
+          </View>
+        </SafeAreaView>
       </Modal>
+
     </View>
   )
 }
