@@ -29,7 +29,7 @@ export function CoffeeScreen(props) {
       >
         <View style={styles.modal}>
           <TouchableOpacity style={styles.imagePickerBtn}>
-            <Text style={styles.modalLabel} onPress={pickImage}>Select Imagehhhh</Text>
+            <Text style={styles.modalLabel} onPress={pickImage}>Select Image</Text>
             {image && <Image source={{ uri: image }} style={{ width: 300, height: 300 }} />}
           </TouchableOpacity>
 

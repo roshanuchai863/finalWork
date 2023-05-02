@@ -173,44 +173,15 @@ export function HomeScreen(props) {
   return (
     <View style={styles.screen}>
       {/* modal element */}
+
+      <Text style={styles.headingText}>KANGAROO CAFE</Text>
       <Modal
         transparent={false}
         animationType="slide"
         visible={showModal}
         onRequestClose={() => setShowModal(false)}
       >
-        {/* <View style={styles.modal}>
-          <Text style={styles.modalLabel}>Title</Text>
-          <TextInput
-            style={styles.modalInput}
-            value={title}
-            onChangeText={(val) => setTitle(val)}
-          />
-          <Text style={styles.modalLabel} >Note</Text>
-          <TextInput
-            multiline={true}
-            style={styles.modalInput2}
-            value={note}
-            onChangeText={(val) => setNote(val)}
-          />
-          <View style={styles.buttonsRow}>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setShowModal(false)}
-            >
-              <Text style={styles.buttonText} >Close</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.addButton}
-              onPress={() => saveNote()}
-            >
-              <Text style={styles.buttonText}>Save</Text>
-            </TouchableOpacity>
-          </View>
-
-        </View>
-      </Modal> */}
-
+{/* THIS MODEL WILL ADD THE DATA TO THE DATABASE */}
         <View style={styles.modal}>
           <TouchableOpacity >
             <Text style={styles.image} onPress={pickImage}>Select Image</Text>
@@ -225,7 +196,6 @@ export function HomeScreen(props) {
             value={itemName}
             onChangeText={(val) => setItemName(val)}
           />
-
 
 
           <Text style={styles.modalLabel} >Description</Text>
@@ -289,6 +259,12 @@ const styles = StyleSheet.create({
   screen: {
     justifyContent: "center",
     position: "relative"
+  },
+  headingText:{
+    fontSize:30,
+textAlign:"center",
+fontWeight:"bold",
+padding:7,
   },
   modal: {
     padding: 10,

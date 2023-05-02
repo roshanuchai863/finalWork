@@ -93,9 +93,10 @@ export default function App() {
       responseData.forEach((note) => {
         let item = note.data()
         item.id = note.id
-        item.itemName = note.data().productPrice,
+        item.itemPrice = note.data().productTitle,
           item.itemDesc = note.data().productDesc,
-          item.itemPrice = note.data().productTitle,
+          item.itemName = note.data().productPrice,
+
           item.image = note.data().ImageUrl,
           coffeeItems.push(item)
       })

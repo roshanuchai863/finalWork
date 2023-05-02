@@ -19,7 +19,8 @@ export function ListItem(props) {
         <Pressable onPress={() => props.handler(data)}>
             <View style={styles.item}>
 
-                {props.image && <Image source={{ uri: props.image }} style={{ width: 200, height: 200 }} />}                <Text style={styles.itemText}>{props.itemName}</Text>
+                {props.image && <Image source={{ uri: props.image }} style={{ width: 200, height: 200 }} />}              
+                  <Text style={styles.itemText}>{props.itemName}</Text>
                 <Text style={styles.itemText}>{props.itemDesc}</Text>
                 <Text style={styles.itemText}>{props.itemPrice}</Text>
             </View>
