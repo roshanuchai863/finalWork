@@ -8,7 +8,12 @@ export function CoffeeScreen(props) {
 
   const saveNote = () => {
     setShowModal(false)
-    const noteObj = { title: title, content: note }
+    const noteObj = {
+      ImageUrl: ImageUrl,
+      productTitle: itemName,
+      productDesc: itemDesc,
+      productPrice: itemPrice,
+    }
     props.add(noteObj)
   }
 
