@@ -1,5 +1,4 @@
 import { View, Text, TouchableOpacity, Modal, TextInput, StyleSheet, FlatList, Image } from "react-native"
-import { useNavigation } from "@react-navigation/native"
 import { useState, useEffect, useContext } from 'react'
 import { AuthContext } from "../contexts/AuthContext"
 import { CoffeeContext } from "../contexts/CoffeeContext"
@@ -12,7 +11,14 @@ import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "firebase/
 import { initializeApp } from "firebase/app";
 import * as ImagePicker from 'expo-image-picker';
 import { firebaseConfig } from "../config/Config"
+import { useRoute, useNavigation } from '@react-navigation/native'
 
+import {
+  getFirestore,
+
+  query,
+  onSnapshot,
+} from 'firebase/firestore'
 export function HomeScreen(props) {
   const navigation = useNavigation()
   const authStatus = useContext(AuthContext)
@@ -20,15 +26,16 @@ export function HomeScreen(props) {
   const DB = useContext(DBContext)
   const storage = getStorage(initializeApp(firebaseConfig))
 
+
   const [showModal, setShowModal] = useState(false)
-  const [title, setTitle] = useState('')
-  const [note, setNote] = useState('')
   const [itemName, setItemName] = useState("")
   const [itemDesc, setItemDesc] = useState("")
   const [itemPrice, setItemPrice] = useState("")
-  const [imageUrl, setImageUrl] = useState("")
   const [image, setImage] = useState("");
+
+
   const [noteData, setNoteData] = useState([])
+  const [CoffeeData, setCoffeeData] = useState([])
 
 
   //save data
@@ -68,6 +75,8 @@ export function HomeScreen(props) {
     }
   };
 
+
+  
 
 
   // image upload
@@ -135,8 +144,8 @@ export function HomeScreen(props) {
           // Upload completed successfully, now we can get the download URL
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             console.log('File available at', downloadURL);
-            setImageUrl(downloadURL);
-            console.log("image source:" + imageUrl + "userid:" + authStatus.uid);
+            setImage(downloadURL);
+            console.log("image source:" + image + "userid:" + authStatus.uid);
           });
         }
       );
@@ -204,9 +213,11 @@ export function HomeScreen(props) {
       </Modal> */}
 
         <View style={styles.modal}>
-          <TouchableOpacity style={styles.imagePickerBtn}>
-            <Text style={styles.modalLabel} onPress={pickImage}>Select Image</Text>
-            {image && <Image source={{ uri: image }} style={{ width: 300, height: 300 }} />}
+          <TouchableOpacity >
+            <Text style={styles.image} onPress={pickImage}>Select Image</Text>
+            {image && <Image source={{ uri: image }} style={{
+              width: 300, height: 400, padding: 20, alignSelf: 'center',
+            }} />}
           </TouchableOpacity>
 
           <Text style={styles.modalLabel}>Item Name</Text>
@@ -313,16 +324,21 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "green",
     flex: 1,
+    backgroundColor: "#52C1FF",
+    margin: 20,
   },
   closeButton: {
     backgroundColor: "#000000",
     padding: 10,
     flex: 1,
+    backgroundColor: "#52C1FF",
+    margin: 20,
   },
   buttonText: {
     color: "#ffffff",
     fontSize: 12,
     textAlign: "center",
+
   },
   buttonsRow: {
     flexDirection: "row",
@@ -333,6 +349,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
+  image: {
+    fontSize: 30,
+    textAlign: "center",
+    padding: 10,
+    marginBottom: 20,
+  }
 
 })
 

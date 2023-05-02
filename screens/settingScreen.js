@@ -2,12 +2,12 @@
 import { View, Text } from 'react-native'
 import { SignOutButton } from '../components/SignOutButton'
 
-export function ProfileScreen () {
- 
+export function SettingScreen() {
+
   return (
     <View>
-      <Text>User Profile</Text>
       <SignOutButton text="Sign out" />
     </View>
   )
 }
+

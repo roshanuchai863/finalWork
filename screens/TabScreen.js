@@ -3,19 +3,19 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import IonIcons from '@expo/vector-icons/Ionicons'
 
 import { HomeScreen } from "./HomeScreen";
-import { ProfileScreen } from "./ProfileScreen";
+import { SettingScreen } from "./settingScreen";
 
 const Tab = createMaterialBottomTabNavigator();
 
 export function TabScreen() {
 
   const HomeScreenOptions = {
-    tabBarLabel: "Notes",
+    tabBarLabel: "Home",
     tabBarIcon: ({ color }) => <MaterialCommunityIcons name="home" color={color} size={28} />
   }
 
   const ProfileScreenOptions = {
-    tabBarLabel: "Profile",
+    tabBarLabel: "Setting",
     tabBarIcon: ({ color }) => <IonIcons name="person-outline" color={color} size={28} />
   }
   return (
@@ -26,8 +26,8 @@ export function TabScreen() {
         options={HomeScreenOptions}
       />
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Setting"
+        component={SettingScreen}
         options={ProfileScreenOptions}
       />
     </Tab.Navigator>

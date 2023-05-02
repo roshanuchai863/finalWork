@@ -8,11 +8,11 @@ export function ListItem(props) {
         itemName: props.itemName,
         itemPrice: props.itemPrice,
         itemDesc: props.itemDesc,
-       image: props.image,
+        image: props.image,
 
 
     }
-    console.log(data)
+    console.log("data" + data)
 
     return (
         <Pressable onPress={() => props.handler(data)}>

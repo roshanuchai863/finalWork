@@ -7,6 +7,8 @@ import { doc, deleteDoc, updateDoc, addDoc } from 'firebase/firestore'
 import IonIcons from '@expo/vector-icons/Ionicons'
 import * as ImagePicker from 'expo-image-picker';
 import { getDoc } from 'firebase/firestore'
+import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "firebase/storage";
+
 
 export function CoffeeScreen(props) {
   const navigation = useNavigation()
@@ -14,11 +16,13 @@ export function CoffeeScreen(props) {
   const DB = useContext(DBContext)
   const route = useRoute()
   const { id, title, content, price, ImageUrl } = route.params
+  const storage = getStorage();
+
 
   const [itemName, setItemName] = useState(title)
   const [itemDesc, setItemDesc] = useState(content)
   const [itemPrice, setItemPrice] = useState(price)
-  const [imageUrl, setImage] = useState(ImageUrl);
+  const [image, setImage] = useState(ImageUrl);
 
   const [showModal, setShowModal] = useState(false)
 
@@ -32,7 +36,7 @@ export function CoffeeScreen(props) {
   const updateNote = async () => {
     const path = `users/${authStatus.uid}/coffee`
     await updateDoc(doc(DB, path, id), {
-      ImageUrl: ImageUrl,
+      ImageUrl: image,
       productTitle: itemName,
       productDesc: itemDesc,
       productPrice: itemPrice,
@@ -55,8 +59,6 @@ export function CoffeeScreen(props) {
         setItemName(docSnap.data().productTitle);
         setItemDesc(docSnap.data().productDesc);
         setItemPrice(docSnap.data().productPrice);
-
-
         console.log("all data" + docSnap.data())
 
       }
@@ -80,7 +82,6 @@ export function CoffeeScreen(props) {
       console.log("image location:" + image)
     }
   };
-
   useEffect(() => {
     const uploadImage = async () => {
       const blobImage = await new Promise((resolve, reject) => {
@@ -93,7 +94,7 @@ export function CoffeeScreen(props) {
           reject(new TypeError("Network request Failed"));
         }
         xhr.responseType = "blob";
-        xhr.open("Get", imageUrl, true)
+        xhr.open("Get", image, true)
         xhr.send();
       })
 
@@ -146,59 +147,68 @@ export function CoffeeScreen(props) {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             console.log('File available at', downloadURL);
             setImage(downloadURL);
-            console.log("image source:" + imageUrl + "userid:" + authStatus.uid);
+            console.log("image source:" + image + "userid:" + authStatus.uid);
           });
         }
       );
 
     }
 
-    if (imageUrl != null) {
+    if (image != null) {
       uploadImage();
       //setImage(imageUrl)
     }
-  }, [imageUrl]);
+  }, [image]);
 
 
   return (
     <View style={styles.screen}>
 
       <TouchableOpacity style={styles.imagePickerBtn}>
-        <Text style={styles.modalLabel} onPress={pickImage}>Select Image</Text>
-        {imageUrl && <Image source={{ uri: imageUrl }} style={{ width: 300, height: 300 }} />}
-      </TouchableOpacity>
+        <Text style={styles.imageviews} onPress={pickImage}>Select Image</Text>
+        {image && <Image source={{ uri: image }} style={{
+          width: 300, height: 400, padding: 20, alignSelf: 'center',
+        }} />}</TouchableOpacity>
 
-      <Text style={styles.modalLabel}>Item Name</Text>
+      <Text style={styles.label}>Item Name</Text>
       <TextInput
-        style={styles.modalInput}
+        style={styles.input}
         value={itemName}
         onChangeText={(val) => setItemName(val)}
       />
 
 
 
-      <Text style={styles.modalLabel} >Description</Text>
+      <Text style={styles.label} >Description</Text>
       <TextInput
         multiline={true}
-        style={styles.modalInput2}
+        style={styles.input}
         value={itemDesc}
         onChangeText={(val) => setItemDesc(val)}
       />
 
 
-      <Text style={styles.modalLabel}>Price</Text>
+      <Text style={styles.label}>Price</Text>
       <TextInput
-        style={styles.modalInput}
+        style={styles.input}
         value={itemPrice}
         onChangeText={(val) => setItemPrice(val)}
       />
       <View style={styles.row}>
         <TouchableOpacity style={styles.delete} onPress={() => setShowModal(true)}>
           <IonIcons name="trash-outline" size={28} color="black" />
+          <Text style={styles.buttonText}>Delete</Text>
         </TouchableOpacity>
+
+
         <TouchableOpacity style={styles.save} onPress={() => updateNote()}>
           <IonIcons name="save-outline" size={28} color="black" />
+          <Text style={styles.buttonText}>Update</Text>
         </TouchableOpacity>
+
+
+
+
       </View>
       {/* Modal */}
       <Modal visible={showModal} style={styles.modal}>
@@ -221,6 +231,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     marginBottom: 10,
+    marginTop: 10,
   },
   input: {
     padding: 5,
@@ -257,4 +268,10 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 100,
   },
+  imageviews: {
+    fontSize: 30,
+    textAlign: "center",
+    padding: 10,
+    marginBottom: 20,
+  }
 })

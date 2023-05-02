@@ -4,6 +4,8 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useState, useEffect } from 'react';
+import { useRoute, useNavigation } from '@react-navigation/native'
+
 // contexts
 import { AuthContext } from './contexts/AuthContext'
 import { CoffeeContext } from './contexts/CoffeeContext';
@@ -29,9 +31,8 @@ import {
   getFirestore,
   collection,
   query,
-  onSnapshot,
+  onSnapshot, doc, getDoc
 } from 'firebase/firestore'
-import { doc, getDoc } from 'firebase/firestore';
 
 
 const Stack = createNativeStackNavigator();
@@ -40,13 +41,16 @@ const FBapp = initializeApp(firebaseConfig)
 const FBauth = getAuth(FBapp)
 const FBdb = getFirestore(FBapp)
 
+
 export default function App() {
   const [auth, setAuth] = useState()
 
   const [CoffeeData, setCoffeeData] = useState([])
-  const [itemName, setItemName] = useState("")
-  const [itemDesc, setItemDesc] = useState("")
-  const [itemPrice, setItemPrice] = useState("")
+  const [itemName, setItemName] = useState([])
+  const [itemDesc, setItemDesc] = useState([])
+  const [itemPrice, setItemPrice] = useState([])
+  const [image, setImage] = useState(null)
+
 
   onAuthStateChanged(FBauth, (user) => {
     if (user) {
@@ -61,6 +65,8 @@ export default function App() {
     if (CoffeeData.length === 0 && auth) {
       GetData()
       // readData();
+      console.log("Dataare here")
+      console.log(CoffeeData);
 
     }
 
@@ -85,16 +91,21 @@ export default function App() {
     const path = `users/${userId}/coffee`
     const dataQuery = query(collection(FBdb, path))
     const unsubscribe = onSnapshot(dataQuery, (responseData) => {
-      let coffeeitem = []
+      let coffeeItems = []
       responseData.forEach((note) => {
         let item = note.data()
         item.id = note.id
-        coffeeitem.push(item)
+        item.itemName = note.data().productPrice,
+          item.itemDesc = note.data().productDesc,
+          item.itemPrice = note.data().productTitle,
+          item.image = note.data().ImageUrl,
+          coffeeItems.push(item)
       })
-      setCoffeeData(coffeeitem)
-      console.log("odd" + CoffeeData)
+      setCoffeeData(coffeeItems)
+      console.log("final doc" + notes.data)
     })
   }
+
 
 
 
