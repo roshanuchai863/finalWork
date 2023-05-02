@@ -6,10 +6,9 @@ import { DBContext } from '../contexts/DBcontext'
 import { doc, deleteDoc, updateDoc, addDoc } from 'firebase/firestore'
 import IonIcons from '@expo/vector-icons/Ionicons'
 import * as ImagePicker from 'expo-image-picker';
+import { getDoc } from 'firebase/firestore'
 
-
-
-export function DetailScreen(props) {
+export function CoffeeScreen(props) {
   const navigation = useNavigation()
   const authStatus = useContext(AuthContext)
   const DB = useContext(DBContext)
@@ -29,46 +28,41 @@ export function DetailScreen(props) {
     navigation.goBack()
   }
 
-  // const updateNote = async () => {
-  //   const path = `users/${authStatus.uid}/coffee`
-  //   await updateDoc(doc(DB, path, id), {
-  //     ImageUrl: imageUrl,
-  //     productTitle: itemName,
-  //     productDesc: itemDesc,
-  //     productPrice: itemPrice,
-  //   })
-
-  //   //resetting input fields
-  //   setItemDesc("");
-  //   setItemName("");
-  //   setItemPrice("");
-  //   setImage("");
-  //   navigation.goBack()
-  // }
 
   const updateNote = async () => {
-
     const path = `users/${authStatus.uid}/coffee`
     await updateDoc(doc(DB, path, id), {
-      ImageUrl: imageUrl,
+      ImageUrl: ImageUrl,
       productTitle: itemName,
       productDesc: itemDesc,
       productPrice: itemPrice,
-    });
-    alert("Data Added")
-
-
-    //resetting input fields
-    setItemDesc("");
-    setItemName("");
-    setItemPrice("");
-    setImage("");
-
-    Alert.alert("Added ", "Successfully Added",)
-
-
+    })
+    navigation.goBack()
   }
 
+
+
+
+  //on openscreen display datainto input field
+  useEffect(() => {
+    const readData = async () => {
+      const docRef = doc(DB, `users/${authStatus.uid}/coffee`, id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setImage(docSnap.data().ImageUrl);
+        console.log("iamge location:" + (docSnap.data().ImageUrl))
+        setItemName(docSnap.data().productTitle);
+        setItemDesc(docSnap.data().productDesc);
+        setItemPrice(docSnap.data().productPrice);
+
+
+        console.log("all data" + docSnap.data())
+
+      }
+    }
+    readData();
+  }, [])
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -99,7 +93,7 @@ export function DetailScreen(props) {
           reject(new TypeError("Network request Failed"));
         }
         xhr.responseType = "blob";
-        xhr.open("Get", image, true)
+        xhr.open("Get", imageUrl, true)
         xhr.send();
       })
 
@@ -151,7 +145,7 @@ export function DetailScreen(props) {
           // Upload completed successfully, now we can get the download URL
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             console.log('File available at', downloadURL);
-            setImageUrl(downloadURL);
+            setImage(downloadURL);
             console.log("image source:" + imageUrl + "userid:" + authStatus.uid);
           });
         }
@@ -210,7 +204,7 @@ export function DetailScreen(props) {
       <Modal visible={showModal} style={styles.modal}>
         <View style={styles.row}>
           <Pressable style={styles.deleteNote} onPress={() => deleteNote()}>
-            <Text>Delete Note?</Text>
+            <Text>Delete coffee?</Text>
           </Pressable>
           <Pressable style={styles.cancelDelete} onPress={() => setShowModal(false)}>
             <Text>Cancel</Text>

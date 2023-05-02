@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Modal, TextInput, StyleSheet } from "react-native"
 import { useState, useEffect } from 'react'
 
-export function NotesScreen(props) {
+export function CoffeeScreen(props) {
   const [showModal, setShowModal] = useState(false)
   const [title, setTitle] = useState('')
   const [note, setNote] = useState('')
@@ -24,7 +24,7 @@ export function NotesScreen(props) {
       >
         <View style={styles.modal}>
           <TouchableOpacity style={styles.imagePickerBtn}>
-            <Text style={styles.modalLabel} onPress={pickImage}>Select Image</Text>
+            <Text style={styles.modalLabel} onPress={pickImage}>Select Imagehhhh</Text>
             {image && <Image source={{ uri: image }} style={{ width: 300, height: 300 }} />}
           </TouchableOpacity>
 

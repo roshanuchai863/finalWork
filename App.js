@@ -6,14 +6,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useState, useEffect } from 'react';
 // contexts
 import { AuthContext } from './contexts/AuthContext'
-import { NoteContext } from './contexts/NoteContext';
+import { CoffeeContext } from './contexts/CoffeeContext';
 import { FBAuthContext } from './contexts/FBAuthContext';
 import { DBContext } from './contexts/DBcontext';
 // screens
 import { HomeScreen } from './screens/HomeScreen';
 import { SignUpScreen } from './screens/SignUp';
 import { SignInScreen } from './screens/SignIn';
-import { DetailScreen } from './screens/DetailScreen';
+import { CoffeeScreen } from './screens/Coffee';
 import { TabScreen } from './screens/TabScreen';
 // firebase modules
 import { firebaseConfig } from './config/Config';
@@ -29,8 +29,10 @@ import {
   getFirestore,
   collection,
   query,
-  onSnapshot
+  onSnapshot,
 } from 'firebase/firestore'
+import { doc, getDoc } from 'firebase/firestore';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -40,8 +42,11 @@ const FBdb = getFirestore(FBapp)
 
 export default function App() {
   const [auth, setAuth] = useState()
-  const [errorMsg, setErrorMsg] = useState()
-  const [noteData, setNoteData] = useState([])
+
+  const [CoffeeData, setCoffeeData] = useState([])
+  const [itemName, setItemName] = useState("")
+  const [itemDesc, setItemDesc] = useState("")
+  const [itemPrice, setItemPrice] = useState("")
 
   onAuthStateChanged(FBauth, (user) => {
     if (user) {
@@ -53,9 +58,13 @@ export default function App() {
   })
 
   useEffect(() => {
-    if (noteData.length === 0 && auth) {
+    if (CoffeeData.length === 0 && auth) {
       GetData()
+      // readData();
+
     }
+
+
   })
 
   const SignUp = (email, password) => {
@@ -70,20 +79,23 @@ export default function App() {
       .catch((error) => console.log(error))
   }
 
+
   const GetData = () => {
     const userId = auth.uid
     const path = `users/${userId}/coffee`
     const dataQuery = query(collection(FBdb, path))
     const unsubscribe = onSnapshot(dataQuery, (responseData) => {
-      let notes = []
+      let coffeeitem = []
       responseData.forEach((note) => {
         let item = note.data()
         item.id = note.id
-        notes.push(item)
+        coffeeitem.push(item)
       })
-      setNoteData(notes)
+      setCoffeeData(coffeeitem)
+      console.log("odd" + CoffeeData)
     })
   }
+
 
 
   return (
@@ -110,19 +122,19 @@ export default function App() {
             <FBAuthContext.Provider value={FBauth} >
               <DBContext.Provider value={FBdb} >
                 <AuthContext.Provider value={auth}>
-                  <NoteContext.Provider value={noteData}>
+                  <CoffeeContext.Provider value={CoffeeData} >
                     <TabScreen {...props} />
-                  </NoteContext.Provider>
+                  </CoffeeContext.Provider>
                 </AuthContext.Provider>
               </DBContext.Provider>
             </FBAuthContext.Provider>
           }
         </Stack.Screen>
-        <Stack.Screen name="Detail">
+        <Stack.Screen name="Coffee">
           {(props) =>
             <DBContext.Provider value={FBdb}>
               <AuthContext.Provider value={auth}>
-                <DetailScreen {...props} />
+                <CoffeeScreen {...props} />
               </AuthContext.Provider>
             </DBContext.Provider>
           }

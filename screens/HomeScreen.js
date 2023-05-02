@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, Modal, TextInput, StyleSheet, FlatList, I
 import { useNavigation } from "@react-navigation/native"
 import { useState, useEffect, useContext } from 'react'
 import { AuthContext } from "../contexts/AuthContext"
-import { NoteContext } from "../contexts/NoteContext"
+import { CoffeeContext } from "../contexts/CoffeeContext"
 import { DBContext } from "../contexts/DBcontext"
 import { addDoc, collection } from "firebase/firestore"
 import { ListItem } from "../components/ListItem"
@@ -12,10 +12,11 @@ import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "firebase/
 import { initializeApp } from "firebase/app";
 import * as ImagePicker from 'expo-image-picker';
 import { firebaseConfig } from "../config/Config"
+
 export function HomeScreen(props) {
   const navigation = useNavigation()
   const authStatus = useContext(AuthContext)
-  const Notes = useContext(NoteContext)
+  const CaffeeItem = useContext(CoffeeContext)
   const DB = useContext(DBContext)
   const storage = getStorage(initializeApp(firebaseConfig))
 
@@ -30,7 +31,7 @@ export function HomeScreen(props) {
   const [noteData, setNoteData] = useState([])
 
 
-
+  //save data
   const saveNote = async () => {
     setShowModal(false)
     const noteObj = {
@@ -48,6 +49,8 @@ export function HomeScreen(props) {
     setItemPrice("");
     setImage("");
   }
+
+  //image picker
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -65,6 +68,9 @@ export function HomeScreen(props) {
     }
   };
 
+
+
+  // image upload
   useEffect(() => {
     const uploadImage = async () => {
       const blobImage = await new Promise((resolve, reject) => {
@@ -150,8 +156,11 @@ export function HomeScreen(props) {
   }, [authStatus])
 
   const ListClickHandler = (data) => {
-    navigation.navigate("Detail", data)
+    navigation.navigate("Coffee", data)
+    console.log("id" + data)
   }
+
+
 
   return (
     <View style={styles.screen}>
@@ -248,7 +257,7 @@ export function HomeScreen(props) {
         <IonIcons name="add-outline" size={28} color="white" />
       </TouchableOpacity>
       <FlatList
-        data={Notes}
+        data={CaffeeItem}
         renderItem={({ item }) => (
           <ListItem
             id={item.id}
